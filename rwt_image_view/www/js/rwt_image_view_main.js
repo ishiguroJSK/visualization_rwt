@@ -45,6 +45,43 @@ $(function() {
     $("#topic-select").empty();
   });
 
+
+
+
+
+
+  $("#larm-button").click(function(e) {
+    var $button = $(this);
+    e.preventDefault();
+
+    var screen_point_pub = new ROSLIB.Topic({
+      ros : ros,
+      name : '/xtion/rgb/image_raw/screenpoint',
+      messageType : 'geometry_msgs/PointStamped'
+    });
+  
+    var screen_point = new ROSLIB.Message({
+      header : {
+        frame_id : "testaaa"
+      },
+      point : {
+        x : Math.random()*600,
+        y : Math.random()*600,
+        z : 0.0
+      }
+    });
+    screen_point_pub.publish(screen_point);
+  });
+
+
+
+
+
+
+
+
+
+
   var mjpeg_canvas = null;
   var current_image_topic = null;
   $("#topic-form").submit(function(e) {
