@@ -45,9 +45,88 @@ $(function() {
     $("#topic-select").empty();
   });
 
+  ////// mouse move
+  var mousemove_pub = new ROSLIB.Topic({
+    ros : ros,
+    name : '/xtion/rgb/image_raw/mousemove',
+    messageType : 'geometry_msgs/PointStamped'
+  });
+  document.getElementById("canvas-area").addEventListener("mousemove", function(e){
+    var clientRect = this.getBoundingClientRect();
+    var canvasX    = e.clientX - clientRect.left;
+    var canvasY    = e.clientY - clientRect.top;
+    var scale      = 480.0 / $("#canvas-area").height();
+    var imageX     = canvasX * scale;
+    var imageY     = canvasY * scale;
+    var mousemove = new ROSLIB.Message({
+      header : { frame_id : "test" },
+      point  : { x : imageX, y : imageY, z : 0.0 }
+    });
+    mousemove_pub.publish(mousemove);
+    document.getElementById("debug-text-area1").innerText =
+      "mouse move\n"+
+      "- clicked point (2D image coordinate)  = "+ imageX    +", "+ imageY    +"\n"+
+      "- clicked point (2D canvas coordinate) = "+ canvasX   +", "+ canvasY   +"\n"+
+      "- clicked point (2D client coordinate) = "+ e.clientX +", "+ e.clientY +"\n\n";
+  });
 
+  ///// mouse click
+  var screenpoint_pub = new ROSLIB.Topic({
+    ros : ros,
+    name : '/xtion/rgb/image_raw/screenpoint',
+    messageType : 'geometry_msgs/PointStamped'
+  });
+  document.getElementById("canvas-area").addEventListener("click", function(e){
+    var clientRect = this.getBoundingClientRect();
+    var canvasX    = e.clientX - clientRect.left;
+    var canvasY    = e.clientY - clientRect.top;
+    var scale      = 480.0 / $("#canvas-area").height();
+    var imageX     = canvasX * scale;
+    var imageY     = canvasY * scale;
+    var screenpoint = new ROSLIB.Message({
+      header : { frame_id : "test" },
+      point  : { x : imageX, y : imageY, z : 0.0 }
+    });
+    screenpoint_pub.publish(screenpoint);
+    document.getElementById("debug-text-area2").innerText =
+      "mouse click\n"+
+      "- clicked point (2D image coordinate)  = "+ imageX    +", "+ imageY    +"\n"+
+      "- clicked point (2D canvas coordinate) = "+ canvasX   +", "+ canvasY   +"\n"+
+      "- clicked point (2D client coordinate) = "+ e.clientX +", "+ e.clientY +"\n\n";
+  });
 
+  ///// 3D point
+  listener1 = new ROSLIB.Topic({
+    ros : ros,
+    name : '/pointcloud_screenpoint_nodelet/output_point',
+    messageType : 'geometry_msgs/PointStamped'
+  });
+  listener1.subscribe(message => {
+    document.getElementById("debug-text-area3").innerText =
+      listener1.name + " = "+ message.point.x +", "+ message.point.y +", "+ message.point.z +"\n\n";
+  });
 
+  ///// larm ref
+  listener2 = new ROSLIB.Topic({
+    ros : ros,
+    name : '/master_larm_pose',
+    messageType : 'geometry_msgs/PoseStamped'
+  });
+  listener2.subscribe(message => {
+    document.getElementById("debug-text-area4").innerText =
+      listener2.name + " = "+ message.pose.position.x +", "+ message.pose.position.y +", "+ message.pose.position.z+"\n\n";
+  });
+
+  ///// rarm ref
+  listener3 = new ROSLIB.Topic({
+    ros : ros,
+    name : '/master_rarm_pose',
+    messageType : 'geometry_msgs/PoseStamped'
+  });
+  listener3.subscribe(message => {
+    document.getElementById("debug-text-area5").innerText =
+      listener3.name + " = "+ message.pose.position.x +", "+ message.pose.position.y +", "+ message.pose.position.z+"\n\n";
+  });
 
 
   $("#larm-button").click(function(e) {
@@ -65,8 +144,8 @@ $(function() {
         frame_id : "testaaa"
       },
       point : {
-        x : Math.random()*600,
-        y : Math.random()*600,
+        x : Math.random()*320,
+        y : Math.random()*480,
         z : 0.0
       }
     });
@@ -74,12 +153,29 @@ $(function() {
   });
 
 
+    
+  $("#rarm-button").click(function(e) {
+    var $button = $(this);
+    e.preventDefault();
 
-
-
-
-
-
+    var screen_point_pub = new ROSLIB.Topic({
+      ros : ros,
+      name : '/xtion/rgb/image_raw/screenpoint',
+      messageType : 'geometry_msgs/PointStamped'
+    });
+  
+    var screen_point = new ROSLIB.Message({
+      header : {
+        frame_id : "testaaa"
+      },
+      point : {
+        x : Math.random()*320 + 320,
+        y : Math.random()*480,
+        z : 0.0
+      }
+    });
+    screen_point_pub.publish(screen_point);
+  });
 
 
   var mjpeg_canvas = null;
@@ -99,6 +195,7 @@ $(function() {
       divID : "canvas-area",
       host : ros.url().hostname,
       topic : topic,
+      quality : 50,
       width: div_width,
       height: 480 * div_width / 640.0
     });

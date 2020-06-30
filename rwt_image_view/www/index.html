@@ -11,9 +11,8 @@
       <div class="page-header">
         <h1><span class="glyphicon glyphicon-star"></span>rwt_image_view <small>robotwebtools image view</small> <span id="config-button"></span></h1>
       </div>
-      
+
       <div id="topic-area">
-        
         <form id="topic-form" role="form" class="form-inline">
           <div class="form-group">
             <label class="sr-only" for="topic-select">topic</label>
@@ -22,15 +21,22 @@
           </div>
           <button type="submit" class="btn btn-primary">view</button>
           <button type="button" id="record-button" class="btn btn-success">record</button>
-          <button type="button" id="larm-button" class="btn btn-success">larm</button>
-          <button type="button" id="rarm-button" class="btn btn-success">rarm</button>
+          <button type="button" id="larm-button" class="btn btn-success">larm ramdom</button>
+          <button type="button" id="rarm-button" class="btn btn-success">rarm ramdom</button>
         </form>
-        
       </div>
-      <div class="row">
-        <div id="canvas-area" class="col-md-12"></div>
-      </div>
+      <!-- <div class="row"> -->
+        <!-- <div id="canvas-area" class="col-md-12"></div> -->
+        <!-- </div> -->
+      <div id="canvas-area" />
+
     </div>
+
+    <div id="debug-text-area1">Here will be debug text</div>
+    <div id="debug-text-area2">Here will be debug text</div>
+    <div id="debug-text-area3">Here will be debug text</div>
+    <div id="debug-text-area4">Here will be debug text</div>
+    <div id="debug-text-area5">Here will be debug text</div>
 
     <script type="text/javascript" src="../rwt_utils_3rdparty/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="3rdparty/ros/js/eventemitter2.js"></script>
@@ -41,13 +47,6 @@
     <script type="text/javascript" src="../rwt_utils_3rdparty/rwt_utils.js"></script>
     <script type="text/javascript" src="js/rwt_image_view_main.js"></script>
 
-    <html>
-      <body>
-	<input type="button" value="ボタン" onclick="this.value='ss'" onmouseover="this.value='マウスオaーバー'" onmouseout="this.value='マウスアウト'">
-      </body>
-    </html>
-
-    
   </body>
 </html>
 
