@@ -1,5 +1,5 @@
 $(function() {
-  var IMAGE_TOPIC = "/image";
+  var IMAGE_TOPIC = "/xtion/rgb/image_raw";
   var HOSTNAME = location.hostname;
   var PORT = "8888";
   var DIV_ID = "canvas-area";

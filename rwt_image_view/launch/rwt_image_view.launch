@@ -7,6 +7,7 @@
 
   <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" >
     <arg name="port" value="8888" />
+    <!-- <arg name="port" value="9000" /> -->
   </include>
   <node pkg="web_video_server" type="web_video_server"
         name="web_video_server"
@@ -15,7 +16,8 @@
    <param name="port" value="8080" />
    <!-- <param name="address" value="127.0.0.1" /> -->
    <!-- <param name="address" value="192.168.42.10" /> -->
-   <param name="address" value="192.168.97.10" />
+   <!-- <param name="address" value="192.168.97.10" /> -->
+   <param name="address" value="133.11.216.13" />
   </node>
   <node pkg="rwt_image_view" type="rosbag_record_server.py"
         name="rosbag_record_server"
