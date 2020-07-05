@@ -129,6 +129,94 @@ $(function() {
   });
 
 
+  var init_base_x   = -0.1;
+  var init_base_y   = -2.0;
+  var init_base_yaw =  0.0;
+  var setModelState = new ROSLIB.Service({
+    ros : ros,
+    name : '/gazebo/set_model_state',
+    serviceType : 'gazebomsgs/SetModelState'
+  });
+  var init_request = new ROSLIB.ServiceRequest({
+    model_state:{
+      model_name: 'iiwa14d',
+      pose:{
+	position:{
+	  x: init_base_x,
+	  y: init_base_y,
+	  z: 0.0
+	},
+	orientation:{
+	  x: 0.0,
+	  y: 0.0,
+	  z: init_base_yaw,
+	  w: 0.0
+	}
+      },
+      twist:{
+	linear:{
+	  x: 0.0,
+	  y: 0.0,
+	  z: 0.0
+	},
+	angular:{
+	  x: 0.0,
+	  y: 0.0,
+	  z: 0.0
+	}
+      }
+    }
+  });
+  var request = new ROSLIB.ServiceRequest(init_request);
+  
+  $("#movebase-yaw-button").click(function(e) {
+    e.preventDefault();
+    request.model_state.pose.orientation.z = (request.model_state.pose.orientation.z == 0) ? 1 : 0;
+    setModelState.callService(request, result => { console.log('Call ' + setModelState.name + 'rotate Z ? = ' + request.model_state.pose.orientation.z); });
+  });
+
+  $("#movebase-f-button").click(function(e) {
+    e.preventDefault();
+    request.model_state.pose.position.x += 0.1;
+    setModelState.callService(request, result => { console.log('Call ' + setModelState.name ); });
+  });
+
+  $("#movebase-b-button").click(function(e) {
+    e.preventDefault();
+    request.model_state.pose.position.x -= 0.1;
+    setModelState.callService(request, result => { console.log('Call ' + setModelState.name ); });
+  });
+
+  $("#movebase-l-button").click(function(e) {
+    e.preventDefault();
+    request.model_state.pose.position.y += 0.1;
+    setModelState.callService(request, result => { console.log('Call ' + setModelState.name ); });
+  });
+
+  $("#movebase-r-button").click(function(e) {
+    e.preventDefault();
+    request.model_state.pose.position.y -= 0.1;
+    setModelState.callService(request, result => { console.log('Call ' + setModelState.name ); });
+  });
+
+  $("#reset-sim-button").click(function(e) {
+    e.preventDefault();
+    var resetWorld = new ROSLIB.Service({
+      ros : ros,
+      name : '/gazebo/reset_world',
+      serviceType : 'std_srcs/Empty'
+    });
+    request = $.extend(true, {}, init_request);
+    var request1 = new ROSLIB.ServiceRequest();
+    resetWorld.callService(request1, result => { console.log('Call ' + setModelState.name); });
+  });
+
+
+
+
+    
+
+    
   $("#larm-button").click(function(e) {
     var $button = $(this);
     e.preventDefault();
