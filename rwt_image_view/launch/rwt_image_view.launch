@@ -12,8 +12,8 @@
         name="web_video_server"
         output="screen"
         clear_params="true">
-   <param name="port" value="8080" />
-   <param name="address" value="127.0.0.1" />
+    <param name="port" value="8080" />
+    <param name="address" value="$(env ROS_IP)" />
   </node>
   <node pkg="rwt_image_view" type="rosbag_record_server.py"
         name="rosbag_record_server"
